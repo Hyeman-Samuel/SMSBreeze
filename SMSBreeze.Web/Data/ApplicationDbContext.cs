@@ -3,15 +3,24 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SMSBreeze.Models.Entities;
 
 namespace SMSBreeze.Web.Data
 {
-	public class ApplicationDbContext : IdentityDbContext
+	public class ApplicationDbContext : IdentityDbContext<Customer>
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options)
 		{
+
 		}
+		public DbSet<Contact> Contacts { get; set; }
+		public DbSet<Customer> Customers { get; set; }
+		public DbSet<Group> Groups { get; set; }
+		public DbSet<GroupAssign> GroupAssigns { get; set; }
+		public DbSet<SentReport> SendReports { get; set; }
+		public DbSet<SentSmsDetails> SmsDetails { get; set; }
+
 
 		
 	}

@@ -1,7 +1,8 @@
 @using Microsoft.AspNetCore.Identity
+@using SMSBreeze.Models.Entities
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<Customer> SignInManager
+@inject UserManager<Customer> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {

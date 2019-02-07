@@ -3,41 +3,58 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SMSBreeze.Models.Entities;
 using SMSBreeze.Web.Models;
 
 namespace SMSBreeze.Web.Controllers
 {
-    public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+	public class HomeController : Controller
+	{
+		private readonly UserManager<Customer> _userManager;
+		private readonly SignInManager<Customer> _signInManager;
 
-            return View();
-        }
+		public HomeController(UserManager<Customer> userManager, SignInManager<Customer> signInManager)
+		{
+			_userManager = userManager;
+			_signInManager = signInManager;
+		}
+		[Authorize]
+		public async Task<IActionResult> Index()
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+		{
+			var user =await _userManager.GetUserAsync(HttpContext.User);
+			ViewBag.Person = user.Id;
 
-            return View();
-        }
+			return View();
+		}
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+		public IActionResult About()
+		{
+			ViewData["Message"] = "Your application description page.";
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
+			return View();
+		}
+
+		public IActionResult Contact()
+		{
+			ViewData["Message"] = "Your contact page.";
+
+			return View();
+		}
+
+		public IActionResult Privacy()
+		{
+			return View();
+		}
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+	}
 }

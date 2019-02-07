@@ -13,7 +13,6 @@ namespace SMSBreeze.Models.Entities
 		public DateTime DateSent { get; set; }
 		public int UnitSent { get; set; }
 		public string Status { get; set; }
-		public int CustomerID { get; set; }
 		public Customer Customer { get; set; }
 		public ICollection<SentSmsDetails> SentSmsDetails{ get; set; }
 

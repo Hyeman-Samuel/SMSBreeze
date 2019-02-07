@@ -12,7 +12,6 @@ namespace SMSBreeze.Models.Entities
 		public string DeliveryReport { get; set; }
 		public string Name { get; set; }
 		public DateTime Date { get; set; }
-		public int SentReportID { get; set; }
 		public SentReport SentReport { get; set; }
 
 	}

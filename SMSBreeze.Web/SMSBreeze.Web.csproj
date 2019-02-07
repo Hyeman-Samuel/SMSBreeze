@@ -6,8 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20190207171511_init.cs" />
+    <Compile Remove="Data\Migrations\20190207171511_init.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190207172158_new.cs" />
+    <Compile Remove="Data\Migrations\20190207172158_new.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190207172420_add-migration new.cs" />
+    <Compile Remove="Data\Migrations\20190207172420_add-migration new.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
   </ItemGroup>
 
 </Project>

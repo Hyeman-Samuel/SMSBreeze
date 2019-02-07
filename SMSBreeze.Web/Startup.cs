@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using SMSBreeze.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SMSBreeze.Models.Entities;
 
 namespace SMSBreeze.Web
 {
@@ -37,7 +38,7 @@ namespace SMSBreeze.Web
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<Customer>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -60,7 +61,7 @@ namespace SMSBreeze.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+		
             app.UseAuthentication();
 
             app.UseMvc(routes =>
