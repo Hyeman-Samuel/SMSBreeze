@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMSBreeze.Web", "SMSBreeze.Web\SMSBreeze.Web.csproj", "{F40C41B7-53CF-4BD2-9925-F6C7614DAD01}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F40C41B7-53CF-4BD2-9925-F6C7614DAD01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F40C41B7-53CF-4BD2-9925-F6C7614DAD01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F40C41B7-53CF-4BD2-9925-F6C7614DAD01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F40C41B7-53CF-4BD2-9925-F6C7614DAD01}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {552771E5-6F37-4187-BAAB-D0CC6825F8D8}
+	EndGlobalSection
+EndGlobal
