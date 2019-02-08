@@ -10,6 +10,7 @@ namespace SMSBreeze.Models.Entities
 		public int ID { get; set; }
 		public string Subject { get; set; }
 		public string Message { get; set; }
+		public int CustomerId { get; set; }
 		public DateTime DateSent { get; set; }
 		public int UnitSent { get; set; }
 		public string Status { get; set; }

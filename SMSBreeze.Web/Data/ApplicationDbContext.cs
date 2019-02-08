@@ -7,7 +7,7 @@ using SMSBreeze.Models.Entities;
 
 namespace SMSBreeze.Web.Data
 {
-	public class ApplicationDbContext : IdentityDbContext<Customer>
+	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 			: base(options)

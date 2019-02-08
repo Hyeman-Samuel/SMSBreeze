@@ -9,7 +9,7 @@ namespace SMSBreeze.Models.Entities
 	{
 		public int ID { get; set; }
 		public int ContactID { get; set; }
-		public virtual Contact Contact { get; set; }
-		public virtual Group Group { get; set; }
+		public  Contact Contact { get; set; }
+		public  Group Group { get; set; }
 	}
 }

@@ -7,27 +7,28 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SMSBreeze.Models.Entities;
+using SMSBreeze.Web.Data;
 using SMSBreeze.Web.Models;
 
 namespace SMSBreeze.Web.Controllers
 {
-
+	[Authorize]
 	public class HomeController : Controller
 	{
-		private readonly UserManager<Customer> _userManager;
-		private readonly SignInManager<Customer> _signInManager;
+		private readonly UserManager<ApplicationUser> _userManager;
+		private readonly SignInManager<ApplicationUser> _signInManager;
 
-		public HomeController(UserManager<Customer> userManager, SignInManager<Customer> signInManager)
+		public HomeController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 		}
-		[Authorize]
-		public async Task<IActionResult> Index()
+		
+		public  IActionResult Index()
 
 		{
-			var user =await _userManager.GetUserAsync(HttpContext.User);
-			ViewBag.Person = user.Id;
+			
+			//ViewBag.Person = user.Id;
 
 			return View();
 		}
