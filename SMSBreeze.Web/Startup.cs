@@ -13,6 +13,8 @@ using SMSBreeze.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SMSBreeze.Models.Entities;
+using SMSBreeze.Web.Repository.Interfaces;
+using SMSBreeze.Web.Repository.Implementation;
 
 namespace SMSBreeze.Web
 {
