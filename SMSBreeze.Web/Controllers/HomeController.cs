@@ -25,7 +25,6 @@ namespace SMSBreeze.Web.Controllers
 		}
 		
 		public  IActionResult Index()
-
 		{
 			
 			//ViewBag.Person = user.Id;
