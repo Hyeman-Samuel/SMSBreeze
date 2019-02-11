@@ -24,4 +24,11 @@
     <Folder Include="Views\Group\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\maps\style.css.map" />
+    <None Include="wwwroot\images\banner1.svg" />
+    <None Include="wwwroot\images\banner2.svg" />
+    <None Include="wwwroot\images\banner3.svg" />
+  </ItemGroup>
+
 </Project>
