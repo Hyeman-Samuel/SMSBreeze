@@ -67,7 +67,7 @@ namespace SMSBreeze.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Customer = new SMSBreeze.Models.Entities.Customer() {DateCreated = DateTime.Now.Date, FullName = Input.Email, }   };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

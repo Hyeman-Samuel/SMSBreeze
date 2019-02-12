@@ -45,7 +45,6 @@ namespace SMSBreeze.Web.Models
                 {
                     if (Contacts != null && Contacts.Length > 3)
                     {
-
                         Keys.Add(Contacts, "Unknown");
                     }
 
