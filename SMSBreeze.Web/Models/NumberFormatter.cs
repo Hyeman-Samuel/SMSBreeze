@@ -11,14 +11,45 @@ namespace SMSBreeze.Web.Models
         {
             Dictionary<string, string> Keys = new Dictionary<string, string>();
 
+            if (messageObjectViewModel.GroupedContacts != null)
+            {
+                foreach (var Contacts in messageObjectViewModel.GroupedContacts)
+                {
+                    if (Contacts.PhoneNumber != null && Contacts.PhoneNumber.Length > 3)
+                    {
+
+                        Keys.Add(Contacts.PhoneNumber, Contacts.Name);
+                    }
+
+                }
+            }
+
+            if (messageObjectViewModel.Contacts != null) { 
             foreach (var Contacts in messageObjectViewModel.Contacts)
             {
-                if (Contacts.Phone != null && Contacts.Phone.Length > 3)
+                if (Contacts.PhoneNumber != null && Contacts.PhoneNumber.Length > 3)
                 {
 
-                    Keys.Add(Contacts.Phone, Contacts.Name);
+                    Keys.Add(Contacts.PhoneNumber, Contacts.Name);
                 }
 
+            }
+            }
+
+            
+            if (messageObjectViewModel.ToContacts != null)
+            {
+
+                var Numbers = messageObjectViewModel.ToContacts.Split(",");
+                foreach (var Contacts in Numbers)
+                {
+                    if (Contacts != null && Contacts.Length > 3)
+                    {
+
+                        Keys.Add(Contacts, "Unknown");
+                    }
+
+                }
             }
 
             return Keys;

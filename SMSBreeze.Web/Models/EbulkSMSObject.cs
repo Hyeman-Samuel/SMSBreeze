@@ -49,4 +49,15 @@ namespace SMSBreeze.Web.Models
         public string totalsent { get; set; }
         public string cost { get; set; }
     }
+    public class EbulkDeliveryReport
+    {
+        public Dlr[] dlr { get; set; }
+    }
+    public class Dlr
+    {
+        public string mobilenumber { get; set; }
+        public string sendtime { get; set; }
+        public string id { get; set; }
+        public string status { get; set; }
+    }
 }

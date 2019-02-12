@@ -12,8 +12,9 @@ namespace SMSBreeze.Models.Entities
 		public string Message { get; set; }
 		public int CustomerId { get; set; }
 		public DateTime DateSent { get; set; }
-		public int UnitSent { get; set; }
-		public string Status { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal? UnitsUsed { get; set; }
+        public string Status { get; set; }
 		public Customer Customer { get; set; }
 		public ICollection<SentSmsDetails> SentSmsDetails{ get; set; }
 

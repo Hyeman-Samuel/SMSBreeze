@@ -14,6 +14,6 @@ namespace SMSBreeze.Models.Entities
 		public string Name { get; set; }
 		public DateTime Date { get; set; }
 		public SentReport SentReport { get; set; }
-
-	}
+        public bool IsDeliveryReportChecked { get; set; }
+    }
 }
