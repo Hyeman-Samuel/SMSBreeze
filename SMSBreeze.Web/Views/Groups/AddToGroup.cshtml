@@ -1,0 +1,12 @@
+﻿@model SMSBreeze.Web.Models.ViewModel.GroupViewModel
+@{
+    ViewData["Title"] = "AddToGroup";
+}
+
+<h2>Add to @Model.Group.GroupName</h2>
+
+@foreach (var item in Model.Contacts)
+{
+    <p> @item.Name </p>
+    <input type="checkbox" name="Contacts" value="@item.ID" />
+}

@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Group\**" />
+    <Content Remove="Views\Group\**" />
+    <EmbeddedResource Remove="Views\Group\**" />
+    <None Remove="Views\Group\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Data\Migrations\20190207171511_init.cs" />
     <Compile Remove="Data\Migrations\20190207171511_init.Designer.cs" />
     <Compile Remove="Data\Migrations\20190207172158_new.cs" />
@@ -21,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
-    <Folder Include="Views\Group\" />
   </ItemGroup>
 
   <ItemGroup>

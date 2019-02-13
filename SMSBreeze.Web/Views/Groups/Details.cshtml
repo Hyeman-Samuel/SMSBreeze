@@ -1,0 +1,63 @@
+﻿@model SMSBreeze.Web.Models.ViewModel.GroupViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    
+    <h4>Group</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Group.GroupName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Group.GroupName)
+        </dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="AddToGroup" asp-route-GroupId="@Model.Group.ID">Add New Member</a>
+</p>
+@if(Model.Contacts.Count == 0) { } else
+{
+<table class="table">
+    <thead>
+        <tr>
+            Members
+        </tr>
+        <tr>
+            Phoe
+        </tr>
+        <tr>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Contacts)
+        {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.PhoneNumber
+
+            </td>
+            <td>
+                <a asp-action="Remove" asp-route-id="@item.ID" asp-route-GroupID="@Model.Group.ID">Remove</a>
+            </td>
+        </tr>
+
+        }
+
+    </tbody>
+</table>
+    }
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Group.ID">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>

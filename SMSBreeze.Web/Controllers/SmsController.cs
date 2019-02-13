@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SMSBreeze.Models.Entities;
 using SMSBreeze.Web.Data;
 using SMSBreeze.Web.Models;
@@ -60,10 +61,13 @@ namespace SMSBreeze.Web.Controllers
             }
             return RedirectToAction();
         }
-    public IActionResult SmSDetails()
-    {
-        return View();
-    }
+    public async Task<IActionResult> Index()
+        {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
+            var SmsOverview = await _dbContext.SendReports.Include(c => c.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).ToListAsync();
+            return View(SmsOverview);
+        }
 }
 }
 
