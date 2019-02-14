@@ -187,14 +187,15 @@ namespace SMSBreeze.Web.Controllers
             var ContactVm = new ContactViewModel()
             {
                 Contact = _context.Contacts.First(i => i.ID == ContactId),
-                Groups = groups
+                Groups = groups,
+                Referee = Request.Headers["Referer"].ToString()
             };
 
             return View(ContactVm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToGroup([Bind("ID")]int Id, int[] Groups)
+        public async Task<IActionResult> AddToGroup([Bind("ID")]int Id, int[] Groups,string Referee)
         {
             var _Contacts = _context.Contacts.First(i => i.ID == Id);
             foreach (var item in Groups)
@@ -210,6 +211,10 @@ namespace SMSBreeze.Web.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            if (!String.IsNullOrEmpty(Referee))
+            {
+                return Redirect(Referee);
+            }
             return RedirectToAction(nameof(Index));
         }
     }

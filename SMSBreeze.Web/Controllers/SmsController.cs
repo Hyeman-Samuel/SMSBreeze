@@ -24,11 +24,11 @@ namespace SMSBreeze.Web.Controllers
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(SentReport report)
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
             var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
-            var SmsOverview = await _dbContext.SendReports.Include(c => c.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).ToListAsync();
+            var SmsOverview = await _dbContext.SendReports.Include(c => c.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).FirstAsync(x =>x.ID ==report.ID);
             return View(SmsOverview);
         }
         public async Task<IActionResult> SendSms()
@@ -71,9 +71,9 @@ namespace SMSBreeze.Web.Controllers
             SMSServiceEBulk eBulk = new SMSServiceEBulk();
             var Response = await eBulk.SendSMSPOSTMethodAsync(messageObjectViewModel);
                    if(Response.ValidationStatus == "Failed") {
-             
-                ///Throw Client Side Validation for No recepient 
-                return View(messageObjectViewModel);
+
+                ///Throw Client Side Validation for No recepient
+                return RedirectToAction(nameof(SendSms));
             }
             SentReport Report = new SentReport()
             {
@@ -99,7 +99,7 @@ namespace SMSBreeze.Web.Controllers
             _dbContext.Add(Report);
             _dbContext.SaveChanges();
             }
-            return View();
+            return RedirectToAction(nameof(Index),Report);
         }
    
 }

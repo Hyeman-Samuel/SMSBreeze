@@ -1,0 +1,45 @@
+﻿@model SMSBreeze.Models.Entities.SentReport
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>@Model.Subject</h2>
+<h4>Sent @Model.DateSent</h4>
+<h6>@Model.UnitsUsed UnitsUsed</h6>
+<h1>Message Report</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Phone Number
+            </th>
+           
+            <th>
+                Delievery Status
+            </th>
+        </tr>
+    </thead>
+    <tbody> 
+        @foreach (var item in Model.SentSmsDetails)
+         {
+         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recipient)
+            </td>
+           <td>
+               @if(item.IsDeliveryReportChecked) {
+                   <h7>Delievered</h7>
+               }
+               else {<h7>Not Delievered</h7> }
+           </td>
+          </tr>
+         }
+    </tbody>
+</table>

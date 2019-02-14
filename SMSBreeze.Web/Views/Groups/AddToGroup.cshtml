@@ -5,7 +5,7 @@
 
 <h2>Add to @Model.Group.GroupName</h2>
 <form asp-action="AddToGroup">
-   
+    @Html.HiddenFor(x => x.Referee)
     @foreach (var item in Model.Contacts)
     {
         <p> @item.Name </p>

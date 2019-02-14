@@ -278,7 +278,7 @@ namespace SMSBreeze.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToGroup([Bind("ID")]int Id, int[] Contacts)
+        public async Task<IActionResult> AddToGroup([Bind("ID")]int Id, int[] Contacts, string Referee)
         {
             var _Group = _context.Groups.First(i => i.ID == Id);
             foreach (var item in Contacts)
@@ -294,7 +294,12 @@ namespace SMSBreeze.Web.Controllers
                 await _context.SaveChangesAsync();
             }
 
-              return RedirectToAction(nameof(Index));
+            if (!String.IsNullOrEmpty(Referee))
+            {
+                return Redirect(Referee);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
         }
 }
