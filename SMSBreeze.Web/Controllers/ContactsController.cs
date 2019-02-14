@@ -8,33 +8,37 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SMSBreeze.Models.Entities;
 using SMSBreeze.Web.Data;
+using SMSBreeze.Web.Models.ViewModel;
 
 namespace SMSBreeze.Web.Controllers
 {
     public class ContactsController : Controller
     {
         private readonly ApplicationDbContext _context;
-		private readonly UserManager<ApplicationUser> _usermanager;
-		private readonly SignInManager<ApplicationUser> _signInManager;
-
-		public ContactsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ContactsController(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager,UserManager<ApplicationUser> userManager)
         {
             _context = context;
-			_usermanager = userManager;
-			_signInManager = signInManager;
+            _signInManager = signInManager;
+            _userManager = userManager; 
         }
 
         // GET: Contacts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Contacts.Include(c => c.Customer);
-            return View(await applicationDbContext.ToListAsync());
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
+            var applicationDbContext = await _context.Contacts.Where(x =>x.CustomerID == _customer.ID).ToListAsync();
+            return View(applicationDbContext);
         }
 
         // GET: Contacts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
+            if (id == null && _context.Contacts.Where(x =>x.CustomerID == user.Customer.ID) == null)
             {
                 return NotFound();
             }
@@ -53,7 +57,6 @@ namespace SMSBreeze.Web.Controllers
         // GET: Contacts/Create
         public IActionResult Create()
         {
-			var user = _signInManager.UserManager.;
             return View();
         }
 
@@ -62,32 +65,35 @@ namespace SMSBreeze.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,CustomerID,Name,Email,PhoneNumber")] Contact contact)
+        public async Task<IActionResult> Create([Bind("ID,Name,Email,PhoneNumber")] Contact contact)
         {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
             if (ModelState.IsValid)
             {
+                contact.CustomerID = _customer.ID; 
                 _context.Add(contact);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "ID", "ID", contact.CustomerID);
             return View(contact);
         }
 
         // GET: Contacts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
             if (id == null)
             {
                 return NotFound();
             }
 
             var contact = await _context.Contacts.FindAsync(id);
-            if (contact == null)
+            if (contact == null&& _context.Contacts.Where(x => x.CustomerID == _customer.ID) == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "ID", "ID", contact.CustomerID);
             return View(contact);
         }
 
@@ -96,8 +102,11 @@ namespace SMSBreeze.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,CustomerID,Name,Email,PhoneNumber")] Contact contact)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Email,PhoneNumber")] Contact contact)
         {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
+
             if (id != contact.ID)
             {
                 return NotFound();
@@ -107,6 +116,7 @@ namespace SMSBreeze.Web.Controllers
             {
                 try
                 {
+                    contact.CustomerID = _customer.ID;
                     _context.Update(contact);
                     await _context.SaveChangesAsync();
                 }
@@ -122,15 +132,16 @@ namespace SMSBreeze.Web.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "ID", "ID", contact.CustomerID);
+            }          
             return View(contact);
         }
 
         // GET: Contacts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
+            if (id == null && _context.Contacts.Where(x => x.CustomerID == _customer.ID) == null)
             {
                 return NotFound();
             }
@@ -160,6 +171,46 @@ namespace SMSBreeze.Web.Controllers
         private bool ContactExists(int id)
         {
             return _context.Contacts.Any(e => e.ID == id);
+        }
+        public async Task<IActionResult> AddToGroup(int ContactId)
+        {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
+
+            var Assign = _context.GroupAssigns.Where(x => x.ContactID == ContactId);
+            List<Group> groups = _context.Groups.Where(x => x.CustomerId == _customer.ID).ToList();
+            foreach (var item in Assign)
+            {
+                var Group = _context.Groups.Find(_context.GroupAssigns.First(x => x.ID == item.ID).Group.ID);
+                groups.Remove(Group);
+            }
+            var ContactVm = new ContactViewModel()
+            {
+               Contact =_context.Contacts.First(i => i.ID == ContactId),
+                Groups = groups                 
+            };
+
+            return View(ContactVm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToGroup([Bind("ID")]int Id, int[] Groups)
+        {
+            var _Contacts = _context.Contacts.First(i => i.ID == Id);
+            foreach (var item in Groups)
+            {
+                var _Group = await _context.Groups.FirstAsync(i => i.ID == item);
+                GroupAssign assign = new GroupAssign()
+                {
+                    Group = _Group,
+                    ContactID = _Contacts.ID
+                };
+                _Group.Members.Add(assign);
+                _context.GroupAssigns.Add(assign);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

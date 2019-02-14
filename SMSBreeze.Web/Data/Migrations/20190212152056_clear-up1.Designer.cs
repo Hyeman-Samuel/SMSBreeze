@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSBreeze.Web.Data;
 
 namespace SMSBreeze.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190212152056_clear-up1")]
+    partial class clearup1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,7 +168,7 @@ namespace SMSBreeze.Web.Data.Migrations
 
                     b.Property<string>("FullName");
 
-                    b.Property<decimal?>("SmsBalance");
+                    b.Property<int>("SmsBalance");
 
                     b.HasKey("ID");
 
@@ -183,13 +185,9 @@ namespace SMSBreeze.Web.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CustomerId");
-
                     b.Property<string>("GroupName");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("Groups");
                 });
@@ -389,14 +387,6 @@ namespace SMSBreeze.Web.Data.Migrations
                     b.HasOne("SMSBreeze.Web.Data.ApplicationUser", "ApplicationUser")
                         .WithOne("Customer")
                         .HasForeignKey("SMSBreeze.Models.Entities.Customer", "ApplicationUserId");
-                });
-
-            modelBuilder.Entity("SMSBreeze.Models.Entities.Group", b =>
-                {
-                    b.HasOne("SMSBreeze.Models.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SMSBreeze.Models.Entities.GroupAssign", b =>

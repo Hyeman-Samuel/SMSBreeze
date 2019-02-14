@@ -13,10 +13,17 @@ namespace SMSBreeze.Models.Entities
 		public string FullName { get; set; }
 		public string ApplicationUserId { get; set; }
 		public DateTime DateCreated { get; set; }
-		public int SmsBalance { get; set; }
+		public decimal? SmsBalance { get; set; }
 		public ApplicationUser  ApplicationUser { get; set; }
-		public ICollection<SmsTransaction> SmsTransactions { get; set; }
-		public ICollection<Contact> Contacts { get; set; }
-		public ICollection<SentReport> SentReports { get;set; }
+		public List<SmsTransaction> SmsTransactions { get; set; }
+		public List<Contact> Contacts { get; set; }
+		public List<SentReport> SentReports { get;set; }
+
+        public Customer()
+        {
+            this.SmsTransactions = new List<SmsTransaction>();
+            this.Contacts = new List<Contact>();
+            this.SentReports = new List<SentReport>();
+        }
 	}
 }

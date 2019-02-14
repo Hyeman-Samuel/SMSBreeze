@@ -42,7 +42,7 @@ namespace SMSBreeze.Web.Models
 
                 EbulkSMSObject smsjson = new EbulkSMSObject();
                 smsjson.SMS = new SMS();
-                smsjson.SMS.auth = new Auth { apikey = "1803b1f87c37134462dffd295ec6426a1e1853a0", username = "abitoguna@yahoo.co.uk" };
+                smsjson.SMS.auth = new Auth { apikey = "e38de754d26c942a10486a255348f8392f75ce79", username = "abitoguna@yahoo.co.uk" };
 
                 smsjson.SMS.message = new Message { flash = "0", messagetext = messageObjectViewModel.Message, sender = messageObjectViewModel.Subject };
                 List<Gsm> gsmNumbers = new List<Gsm>();

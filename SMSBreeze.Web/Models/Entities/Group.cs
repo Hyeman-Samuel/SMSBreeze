@@ -9,7 +9,13 @@ namespace SMSBreeze.Models.Entities
 	{
 		public int ID { get; set; }
 		public string GroupName { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
+        public List<GroupAssign> Members { get; set; }
 
-		public ICollection<GroupAssign> Members { get; set; }
+        public Group()
+        {
+            this.Members = new List<GroupAssign>(); 
+        }
 	}
 }
