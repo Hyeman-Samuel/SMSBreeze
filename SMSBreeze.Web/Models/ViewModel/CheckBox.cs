@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SMSBreeze.Web.Models.ViewModel
 {
-    public class GroupViewModel
+    public class CheckBox
     {
-        public Group Group { get; set; }
-        public List<Contact> Contacts { get; set; }
-        public List<CheckBox> CheckedContacts { get; set; }
+        public Contact Contact { get; set; }
+        public bool Checked { get; set; }
     }
 }
