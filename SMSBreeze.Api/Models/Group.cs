@@ -1,9 +1,12 @@
-﻿using System;
+﻿using SMSBreeze.Api.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SMSBreeze.Models.Entities
+
+namespace SMSBreeze.Api.Data
+
 {
 	public class Group
 	{
@@ -15,7 +18,7 @@ namespace SMSBreeze.Models.Entities
 
 		public Group()
 		{
-			this.Members = new List<GroupAssign>(); 
+			this.Members = new List<GroupAssign>();
 		}
 	}
 }

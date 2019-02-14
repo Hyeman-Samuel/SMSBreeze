@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SMSBreeze.Models.Entities
+namespace SMSBreeze.Api.Models
 {
 	public class SmsTransaction
 	{
@@ -14,7 +11,5 @@ namespace SMSBreeze.Models.Entities
 		public int UnitPurchased { get; set; }
 		public int CustomerId { get; set; }
 		public Customer Customer { get; set; }
-
 	}
 }
-	  

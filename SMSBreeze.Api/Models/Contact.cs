@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SMSBreeze.Api.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace SMSBreeze.Models.Entities
+namespace SMSBreeze.Api.Data
 {
 	public class Contact
 	{
@@ -13,10 +10,9 @@ namespace SMSBreeze.Models.Entities
 		public string Name { get; set; }
 		public string Email { get; set; }
 		public string PhoneNumber { get; set; }
-	
-		public	Customer Customer { get; set; }
-	
-		public List<GroupAssign> GroupAssign { get; set; }
 
+		public Customer Customer { get; set; }
+
+		public Collection<GroupAssign> GroupAssign { get; set; }
 	}
 }

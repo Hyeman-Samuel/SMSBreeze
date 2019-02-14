@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SMSBreeze.Models.Entities;
+using SMSBreeze.Api.Models;
 
-namespace SMSBreeze.Web.Data
+namespace SMSBreeze.Api.Data
 {
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{
@@ -20,7 +20,6 @@ namespace SMSBreeze.Web.Data
 		public DbSet<GroupAssign> GroupAssigns { get; set; }
 		public DbSet<SentReport> SendReports { get; set; }
 		public DbSet<SentSmsDetails> SmsDetails { get; set; }
-		public DbSet<SmsTransaction> SmsTransactions { get; set; }
 
 
 		
