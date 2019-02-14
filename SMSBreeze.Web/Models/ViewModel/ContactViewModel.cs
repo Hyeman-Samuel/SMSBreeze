@@ -10,5 +10,6 @@ namespace SMSBreeze.Web.Models.ViewModel
     {
         public Contact  Contact { get; set; }
         public List<Group> Groups { get; set; }
+        public string Referee { get; set; }
     }
 }

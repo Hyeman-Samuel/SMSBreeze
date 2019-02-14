@@ -19,6 +19,7 @@
     <Compile Remove="Data\Migrations\20190207172158_new.Designer.cs" />
     <Compile Remove="Data\Migrations\20190207172420_add-migration new.cs" />
     <Compile Remove="Data\Migrations\20190207172420_add-migration new.Designer.cs" />
+    <Compile Remove="Models\RequiredIfAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,5 +11,6 @@ namespace SMSBreeze.Web.Models.ViewModel
         public Group Group { get; set; }
         public List<Contact> Contacts { get; set; }
         public List<CheckBox> CheckedContacts { get; set; }
+        public string Referee { get; set; }
     }
 }

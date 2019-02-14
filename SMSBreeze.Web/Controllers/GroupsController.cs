@@ -70,6 +70,7 @@ namespace SMSBreeze.Web.Controllers
             var GroupVm = new GroupViewModel()
             {
                 Contacts = _context.Contacts.Where(x => x.CustomerID == _customer.ID).ToList(),
+                Referee = Request.Headers["Referer"].ToString()
             };
             return View(GroupVm);
         }
@@ -136,7 +137,8 @@ namespace SMSBreeze.Web.Controllers
             var GroupVm = new GroupViewModel()
             {     Group =group,
                 Contacts = _context.Contacts.Where(x => x.CustomerID == _customer.ID).ToList(),
-                  CheckedContacts =list
+                  CheckedContacts =list ,
+                Referee = Request.Headers["Referer"].ToString()
             };
             return View(GroupVm);
         }
@@ -251,7 +253,7 @@ namespace SMSBreeze.Web.Controllers
                 Group.Members.Remove(assign);
             _context.GroupAssigns.Remove(assign);
                     await _context.SaveChangesAsync(); }
-                    return RedirectToAction(nameof(Index));          
+                    return Redirect(Request.Headers["Referer"].ToString());          
         }
 
         public async Task<IActionResult> AddToGroup(int GroupId)
@@ -268,7 +270,8 @@ namespace SMSBreeze.Web.Controllers
             var GroupVm = new GroupViewModel()
             {
                 Group = _context.Groups.First(i => i.ID == GroupId),
-                Contacts = contacts
+                Contacts = contacts,
+                Referee = Request.Headers["Referer"].ToString()
             };
 
             return View(GroupVm);

@@ -14,6 +14,7 @@ namespace SMSBreeze.Web.Models
     {
 
         public bool Status { get; set; }
+        public string ValidationStatus { get; set; }
         public decimal UnitsUsed { get; set; }
         public string Response { get; set; }
         public string Message { get; set; }
@@ -30,6 +31,10 @@ namespace SMSBreeze.Web.Models
         public async Task<CommunicationResponseViewModel> SendSMSPOSTMethodAsync(MessageObjectViewModel messageObjectViewModel)
         {
                 var numbers = NumberFormatter.FormatNumbers(messageObjectViewModel);
+            if(numbers == null)
+            {
+                return new CommunicationResponseViewModel() { ValidationStatus ="Failed"};
+            }
               var response=  await SendSms(messageObjectViewModel, numbers);
                 return response;
         }
@@ -159,6 +164,7 @@ namespace SMSBreeze.Web.Models
                             smsresponse.Message = "Success";
                             smsresponse.Response = "Message sent";
                             smsresponse.Status = true;
+                        smsresponse.ValidationStatus = "Correct";
                         smsresponse.UnitsUsed = decimal.Parse(res.response.cost);
                             smsresponse.Subject = smsjson.SMS.message.sender;
                             smsresponse.MessageBody = smsjson.SMS.message.messagetext;
@@ -333,11 +339,12 @@ namespace SMSBreeze.Web.Models
         public string Subject { get; set; }
         [Required]
         public string Message { get; set; }
+        
         public List<Contact> Contacts { get; set; }
         public List<Contact> GroupedContacts { get; set; }
         public string ToContacts { get; set; }
         public List<Group> Groups { get; set; }
-
+        public string Referee { get; set; }
         public MessageObjectViewModel()
         {
             this.Contacts = new List<Contact>();
