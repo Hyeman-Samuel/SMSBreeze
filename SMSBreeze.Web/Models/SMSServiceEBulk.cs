@@ -2,6 +2,7 @@
 using SMSBreeze.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -327,10 +328,21 @@ namespace SMSBreeze.Web.Models
     /// </summary>
     public class MessageObjectViewModel
     {
+        [Required]
+        [StringLength(11)]
         public string Subject { get; set; }
+        [Required]
         public string Message { get; set; }
         public List<Contact> Contacts { get; set; }
         public List<Contact> GroupedContacts { get; set; }
         public string ToContacts { get; set; }
+        public List<Group> Groups { get; set; }
+
+        public MessageObjectViewModel()
+        {
+            this.Contacts = new List<Contact>();
+            this.Groups = new List<Group>();
+            this.GroupedContacts = new List<Contact>();
+        }
     }
 }  

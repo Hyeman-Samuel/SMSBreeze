@@ -115,15 +115,28 @@ namespace SMSBreeze.Web.Controllers
                 return NotFound();
             } 
             var user = await _signInManager.UserManager.GetUserAsync(User);
-            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
+            var _customer = await _context.Customers.FirstAsync(x => x.ApplicationUserId == user.Id);
             var group = await _context.Groups.FindAsync(id);
+            var assig =await _context.GroupAssigns.Where(x => x.Group.ID == id).ToListAsync();
+            var AllContacts = await _context.Contacts.Where(x => x.CustomerID == _customer.ID).ToListAsync();
             if (id == null)
             {
                 return NotFound();
             }
+            var list = new List<CheckBox>();
+            foreach (var item in AllContacts)
+            {
+                
+                list.Add(new CheckBox()
+                {
+                    Contact = item,
+                    Checked = assig.Any(p => p.ContactID == item.ID) ? true : false
+                });
+            }                            
             var GroupVm = new GroupViewModel()
             {     Group =group,
                 Contacts = _context.Contacts.Where(x => x.CustomerID == _customer.ID).ToList(),
+                  CheckedContacts =list
             };
             return View(GroupVm);
         }
@@ -154,6 +167,7 @@ namespace SMSBreeze.Web.Controllers
                         foreach (var item in Contacts)
                         {
                             var contacts = _context.Contacts.First(x => x.ID == item);
+                            if(_context.GroupAssigns.Where(x => x.Group.ID == group.ID).Any(x =>x.ContactID == contacts.ID)){ } else { 
                             GroupAssign assign = new GroupAssign()
                             {
                                 ContactID = contacts.ID
@@ -164,6 +178,7 @@ namespace SMSBreeze.Web.Controllers
                     }
                     _context.Update(group);
                     await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

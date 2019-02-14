@@ -23,16 +23,42 @@ namespace SMSBreeze.Web.Controllers
             _userManager = userManager;
             _dbContext = dbContext;
         }
-        public IActionResult SendSms()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> SendSms(MessageObjectViewModel messageObjectViewModel)
+        public async Task<IActionResult> SendSms()
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
             var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
+            var MessageVM = new MessageObjectViewModel() {
+                Contacts =await _dbContext.Contacts.Where(x => x.CustomerID == _customer.ID).ToListAsync(),
+                Groups = await _dbContext.Groups.Where(x => x.CustomerId == _customer.ID).ToListAsync()
+            };
+            return View(MessageVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendSms(MessageObjectViewModel messageObjectViewModel,int[] groups,int[] contacts)
+        {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
+             if(groups != null)
+             {
+                foreach (var group in groups)
+                {
+                    var assig = await _dbContext.GroupAssigns.Where(x => x.Group.ID == group).ToListAsync();
+                    foreach (var item in assig)
+                    {
+                        var _contact = await _dbContext.Contacts.FirstAsync(x => x.ID == item.ContactID);
+                        messageObjectViewModel.GroupedContacts.Add(_contact);
+                    }
+                }
+             }
+            if (contacts != null)
+            {
+                foreach (var contact in contacts)
+                {                   
+                        var _contact = await _dbContext.Contacts.FindAsync(contact);
+                        messageObjectViewModel.Contacts.Add(_contact);                   
+                }
+            }
             SMSServiceEBulk eBulk = new SMSServiceEBulk();
             var Response = await eBulk.SendSMSPOSTMethodAsync(messageObjectViewModel);
             SentReport Report = new SentReport()
