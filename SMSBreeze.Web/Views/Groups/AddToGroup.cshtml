@@ -4,9 +4,15 @@
 }
 
 <h2>Add to @Model.Group.GroupName</h2>
+<form asp-action="AddToGroup">
+   
+    @foreach (var item in Model.Contacts)
+    {
+        <p> @item.Name </p>
+        <input type="checkbox" name="Contacts" value="@item.ID" />
+    }
 
-@foreach (var item in Model.Contacts)
-{
-    <p> @item.Name </p>
-    <input type="checkbox" name="Contacts" value="@item.ID" />
-}
+    <div class="form-group">
+        <input type="submit" asp-route-Id="@Model.Group.ID" value="Add" class="btn btn-default" />
+    </div>
+</form>

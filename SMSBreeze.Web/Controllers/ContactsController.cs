@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SMSBreeze.Models.Entities;
 using SMSBreeze.Web.Data;
+using SMSBreeze.Web.Models.ViewModel;
 
 namespace SMSBreeze.Web.Controllers
 {
@@ -170,6 +171,46 @@ namespace SMSBreeze.Web.Controllers
         private bool ContactExists(int id)
         {
             return _context.Contacts.Any(e => e.ID == id);
+        }
+        public async Task<IActionResult> AddToGroup(int ContactId)
+        {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
+
+            var Assign = _context.GroupAssigns.Where(x => x.ContactID == ContactId);
+            List<Group> groups = _context.Groups.Where(x => x.CustomerId == _customer.ID).ToList();
+            foreach (var item in Assign)
+            {
+                var Group = _context.Groups.Find(_context.GroupAssigns.First(x => x.ID == item.ID).Group.ID);
+                groups.Remove(Group);
+            }
+            var ContactVm = new ContactViewModel()
+            {
+               Contact =_context.Contacts.First(i => i.ID == ContactId),
+                Groups = groups                 
+            };
+
+            return View(ContactVm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToGroup([Bind("ID")]int Id, int[] Groups)
+        {
+            var _Contacts = _context.Contacts.First(i => i.ID == Id);
+            foreach (var item in Groups)
+            {
+                var _Group = await _context.Groups.FirstAsync(i => i.ID == item);
+                GroupAssign assign = new GroupAssign()
+                {
+                    Group = _Group,
+                    ContactID = _Contacts.ID
+                };
+                _Group.Members.Add(assign);
+                _context.GroupAssigns.Add(assign);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

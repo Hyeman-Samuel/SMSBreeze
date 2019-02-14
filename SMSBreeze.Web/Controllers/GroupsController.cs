@@ -239,11 +239,11 @@ namespace SMSBreeze.Web.Controllers
                     return RedirectToAction(nameof(Index));          
         }
 
-        public async Task<IActionResult> AddToGroup(int id)
+        public async Task<IActionResult> AddToGroup(int GroupId)
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
             var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
-            var Assign = _context.GroupAssigns.Where(x => x.Group.ID == id);
+            var Assign = _context.GroupAssigns.Where(x => x.Group.ID == GroupId);
             List<Contact> contacts = _context.Contacts.Where(x => x.CustomerID == _customer.ID).ToList();
             foreach (var item in Assign)
             {
@@ -252,7 +252,7 @@ namespace SMSBreeze.Web.Controllers
             }
             var GroupVm = new GroupViewModel()
             {
-                Group = _context.Groups.First(i => i.ID == id),
+                Group = _context.Groups.First(i => i.ID == GroupId),
                 Contacts = contacts
             };
 
@@ -260,19 +260,22 @@ namespace SMSBreeze.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToGroup(int id, int[] Contacts)
+        public async Task<IActionResult> AddToGroup([Bind("ID")]int Id, int[] Contacts)
         {
-            var Group = _context.Groups.First(i => i.ID == id);
+            var _Group = _context.Groups.First(i => i.ID == Id);
             foreach (var item in Contacts)
             {
                 var _contacts = await _context.Contacts.FirstAsync(i => i.ID == item);
                 GroupAssign assign = new GroupAssign()
                 {
+                    Group =_Group,
                     ContactID = _contacts.ID
                 };
-                Group.Members.Add(assign);
-                
+                _Group.Members.Add(assign);
+                _context.GroupAssigns.Add(assign);
+                await _context.SaveChangesAsync();
             }
+
               return RedirectToAction(nameof(Index));
         }
         }

@@ -1,0 +1,17 @@
+﻿@model SMSBreeze.Web.Models.ViewModel.ContactViewModel
+@{
+    ViewData["Title"] = "AddToGroup";
+}
+
+<h2>Available Groups</h2>
+<form asp-action="AddToGroup">
+
+    @foreach (var item in Model.Groups)
+    {
+         @item.GroupName<input type="checkbox" name="Groups" value="@item.ID" />
+    }
+
+    <div class="form-group">
+        <input type="submit" asp-route-Id="@Model.Contact.ID" value="Add" class="btn btn-default" />
+    </div>
+</form>
