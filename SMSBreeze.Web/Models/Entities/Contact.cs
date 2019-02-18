@@ -11,14 +11,14 @@ namespace SMSBreeze.Models.Entities
 	{
 		public int ID { get; set; }
 		public int CustomerID { get; set; }
-        [StringLength(20)]
-        [Required]
-        public string Name { get; set; }
-        [EmailAddress]
-        public string Email { get; set; }
-        [StringLength(11)]
-        [Required]
-        public string PhoneNumber { get; set; }
+		[StringLength(20)]
+		[Required]
+		public string Name { get; set; }
+		[EmailAddress]
+		public string Email { get; set; }
+		[StringLength(11)]
+		[Required]
+		public string PhoneNumber { get; set; }
 	
 		public	Customer Customer { get; set; }
 	

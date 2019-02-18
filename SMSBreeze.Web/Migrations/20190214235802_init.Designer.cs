@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSBreeze.Web.Data;
 
-namespace SMSBreeze.Web.Data.Migrations
+namespace SMSBreeze.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190207185803_CustomerIdentity")]
-    partial class CustomerIdentity
+    [Migration("20190214235802_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,22 +141,158 @@ namespace SMSBreeze.Web.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CustomerId");
+                    b.Property<int>("CustomerID");
 
                     b.Property<string>("Email");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20);
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(11);
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerID");
 
                     b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("SMSBreeze.Models.Entities.Customer", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<string>("FullName");
+
+                    b.Property<decimal?>("SmsBalance");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique()
+                        .HasFilter("[ApplicationUserId] IS NOT NULL");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("SMSBreeze.Models.Entities.Group", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CustomerId");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("SMSBreeze.Models.Entities.GroupAssign", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ContactID");
+
+                    b.Property<int?>("GroupID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ContactID");
+
+                    b.HasIndex("GroupID");
+
+                    b.ToTable("GroupAssigns");
+                });
+
+            modelBuilder.Entity("SMSBreeze.Models.Entities.SentReport", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CustomerId");
+
+                    b.Property<DateTime>("DateSent");
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("Status");
+
+                    b.Property<string>("Subject");
+
+                    b.Property<decimal?>("UnitsUsed");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("SendReports");
+                });
+
+            modelBuilder.Entity("SMSBreeze.Models.Entities.SentSmsDetails", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<bool>("IsDeliveryReportChecked");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Recipient");
+
+                    b.Property<int>("SentReportID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("SentReportID");
+
+                    b.ToTable("SmsDetails");
+                });
+
+            modelBuilder.Entity("SMSBreeze.Models.Entities.SmsTransaction", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount");
+
+                    b.Property<int>("CustomerId");
+
+                    b.Property<DateTime>("DatePaid");
+
+                    b.Property<string>("Email");
+
+                    b.Property<int>("UnitPurchased");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("SmsTransactions");
+                });
+
+            modelBuilder.Entity("SMSBreeze.Web.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -166,14 +302,10 @@ namespace SMSBreeze.Web.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<DateTime>("DateCreated");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
-
-                    b.Property<string>("FullName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -193,8 +325,6 @@ namespace SMSBreeze.Web.Data.Migrations
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<int>("SmsBalance");
-
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
@@ -213,110 +343,6 @@ namespace SMSBreeze.Web.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SMSBreeze.Models.Entities.Group", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("GroupName");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("SMSBreeze.Models.Entities.GroupAssign", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ContactID");
-
-                    b.Property<int?>("GroupID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ContactID")
-                        .IsUnique();
-
-                    b.HasIndex("GroupID");
-
-                    b.ToTable("GroupAssigns");
-                });
-
-            modelBuilder.Entity("SMSBreeze.Models.Entities.SentReport", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CustomerId");
-
-                    b.Property<DateTime>("DateSent");
-
-                    b.Property<string>("Message");
-
-                    b.Property<string>("Status");
-
-                    b.Property<string>("Subject");
-
-                    b.Property<int>("UnitSent");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("SendReports");
-                });
-
-            modelBuilder.Entity("SMSBreeze.Models.Entities.SentSmsDetails", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<string>("DeliveryReport");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Recipient");
-
-                    b.Property<int?>("SentReportID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("SentReportID");
-
-                    b.ToTable("SmsDetails");
-                });
-
-            modelBuilder.Entity("SMSBreeze.Models.Entities.SmsTransaction", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("AmountPaid");
-
-                    b.Property<string>("CustomerId");
-
-                    b.Property<DateTime>("DatePaid");
-
-                    b.Property<int>("UnitPurchased");
-
-                    b.Property<string>("personalName");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("SmsTransaction");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -327,7 +353,7 @@ namespace SMSBreeze.Web.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("SMSBreeze.Models.Entities.Customer")
+                    b.HasOne("SMSBreeze.Web.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -335,7 +361,7 @@ namespace SMSBreeze.Web.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("SMSBreeze.Models.Entities.Customer")
+                    b.HasOne("SMSBreeze.Web.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -348,7 +374,7 @@ namespace SMSBreeze.Web.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SMSBreeze.Models.Entities.Customer")
+                    b.HasOne("SMSBreeze.Web.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -356,7 +382,7 @@ namespace SMSBreeze.Web.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("SMSBreeze.Models.Entities.Customer")
+                    b.HasOne("SMSBreeze.Web.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -366,14 +392,30 @@ namespace SMSBreeze.Web.Data.Migrations
                 {
                     b.HasOne("SMSBreeze.Models.Entities.Customer", "Customer")
                         .WithMany("Contacts")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SMSBreeze.Models.Entities.Customer", b =>
+                {
+                    b.HasOne("SMSBreeze.Web.Data.ApplicationUser", "ApplicationUser")
+                        .WithOne("Customer")
+                        .HasForeignKey("SMSBreeze.Models.Entities.Customer", "ApplicationUserId");
+                });
+
+            modelBuilder.Entity("SMSBreeze.Models.Entities.Group", b =>
+                {
+                    b.HasOne("SMSBreeze.Models.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SMSBreeze.Models.Entities.GroupAssign", b =>
                 {
                     b.HasOne("SMSBreeze.Models.Entities.Contact", "Contact")
-                        .WithOne("GroupAssign")
-                        .HasForeignKey("SMSBreeze.Models.Entities.GroupAssign", "ContactID")
+                        .WithMany("GroupAssign")
+                        .HasForeignKey("ContactID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SMSBreeze.Models.Entities.Group", "Group")
@@ -385,21 +427,24 @@ namespace SMSBreeze.Web.Data.Migrations
                 {
                     b.HasOne("SMSBreeze.Models.Entities.Customer", "Customer")
                         .WithMany("SentReports")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SMSBreeze.Models.Entities.SentSmsDetails", b =>
                 {
                     b.HasOne("SMSBreeze.Models.Entities.SentReport", "SentReport")
                         .WithMany("SentSmsDetails")
-                        .HasForeignKey("SentReportID");
+                        .HasForeignKey("SentReportID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SMSBreeze.Models.Entities.SmsTransaction", b =>
                 {
                     b.HasOne("SMSBreeze.Models.Entities.Customer", "Customer")
                         .WithMany("SmsTransactions")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

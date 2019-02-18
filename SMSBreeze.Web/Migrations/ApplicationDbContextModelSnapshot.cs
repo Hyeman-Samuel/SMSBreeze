@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSBreeze.Web.Data;
 
-namespace SMSBreeze.Web.Data.Migrations
+namespace SMSBreeze.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190214123249_PaystackModel")]
-    partial class PaystackModel
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,9 +143,13 @@ namespace SMSBreeze.Web.Data.Migrations
 
                     b.Property<string>("Email");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20);
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(11);
 
                     b.HasKey("ID");
 
@@ -187,7 +189,9 @@ namespace SMSBreeze.Web.Data.Migrations
 
                     b.Property<int>("CustomerId");
 
-                    b.Property<string>("GroupName");
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasMaxLength(20);
 
                     b.HasKey("ID");
 
@@ -269,13 +273,15 @@ namespace SMSBreeze.Web.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("AmountPaid");
+                    b.Property<int>("Amount");
 
                     b.Property<int>("CustomerId");
 
                     b.Property<DateTime>("DatePaid");
 
-                    b.Property<string>("ReferenceNumber");
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Reference");
 
                     b.Property<int>("UnitPurchased");
 
@@ -283,7 +289,7 @@ namespace SMSBreeze.Web.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("SmsTransaction");
+                    b.ToTable("SmsTransactions");
                 });
 
             modelBuilder.Entity("SMSBreeze.Web.Data.ApplicationUser", b =>

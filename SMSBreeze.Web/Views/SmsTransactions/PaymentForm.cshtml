@@ -1,0 +1,106 @@
+﻿@model SMSBreeze.Models.Entities.SmsTransaction
+
+@{
+	ViewData["Title"] = "PaymentForm";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+	function payWithPaystack() {
+		var handler = PaystackPop.setup({
+			key: 'pk_test_a3367966168bd777df5436b4068f6947c1a78b1b',
+			email: $('#email').val(),
+			amount: $('#amount').val() * 100,
+			currency: "NGN",
+			ref: '' + Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+			metadata: {
+				custom_fields: [
+					{
+						display_name: $('fname').val,
+						variable_name: "mobile_number",
+						value:$('pnumber').val()
+					}
+				]
+			},
+			callback: function (response) {
+				var transact = new Object();
+				transact.Reference = response.reference;
+				transact.Amount = $('#amount').val() * 100;
+				transact.Email = $('#email').val();
+
+				$.ajax({
+					url: 'http://localhost:2284/API/VerifyPayment',
+					type: 'POST',
+					dataType: 'json',
+					data:transact,
+					success: function (data) {
+						console.log(data);
+					},
+					error: function (errorThrown) {
+						console.log("Error");
+					}
+				});
+
+				alert('success. transaction ref is ' + response.reference);
+			},
+			onClose: function () {
+				alert('window closed');
+			}
+		});
+		handler.openIframe();
+	}
+
+
+</script>
+<h2>PaymentForm</h2>
+
+<hr /> <span style="display:none" id="customer">ViewBag.customer</span>
+<div class="row">
+	<div class="col-md-4">
+		<form>
+			<script src="https://js.paystack.co/v1/inline.js"></script>
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label class="control-label">Email</label>
+				<input id="email" class="form-control" />
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label class="control-label">First Name</label>
+				<input id="fname" class="form-control" />
+				@*<span asp-validation-for="Email" class="text-danger"></span>*@
+			</div>
+			<div class="form-group">
+				<label class="control-label">Last Name</label>
+				<input id="lname" class="form-control" />
+				@*<span asp-validation-for="Email" class="text-danger"></span>*@
+			</div>
+
+			<div class="form-group">
+				<label class="control-label">Amount</label>
+				<input id="amount" class="form-control" />
+				<span asp-validation-for="Amount" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label class="control-label">Phone Number</label>
+				<input id="pnumber" placeholder="Format => 81012345678" class="form-control" />
+				
+				@*<span asp-validation-for="Email" class="text-danger"></span>*@
+			</div>
+			<div class="form-group">
+				<label class="control-label">UnitsPurchased</label>
+				<input id="units" class="form-control" disabled />
+				<span asp-validation-for="UnitPurchased" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<button type="button" onclick="payWithPaystack()"> Pay </button>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
