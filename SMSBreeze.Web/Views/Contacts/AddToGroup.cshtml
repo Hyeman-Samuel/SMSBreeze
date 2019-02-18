@@ -5,7 +5,7 @@
 
 <h2>Available Groups</h2>
 <form asp-action="AddToGroup">
-
+    @Html.HiddenFor(x =>x.Referee)
     @foreach (var item in Model.Groups)
     {
          @item.GroupName<input type="checkbox" name="Groups" value="@item.ID" />

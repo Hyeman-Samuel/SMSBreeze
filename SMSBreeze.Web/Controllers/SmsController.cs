@@ -23,13 +23,22 @@ namespace SMSBreeze.Web.Controllers
             _userManager = userManager;
             _dbContext = dbContext;
         }
+
+        public async Task<IActionResult> Index(SentReport report)
+        {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
+            var SmsOverview = await _dbContext.SendReports.Include(c => c.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).FirstAsync(x =>x.ID ==report.ID);
+            return View(SmsOverview);
+        }
         public async Task<IActionResult> SendSms()
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
             var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
             var MessageVM = new MessageObjectViewModel() {
                 Contacts =await _dbContext.Contacts.Where(x => x.CustomerID == _customer.ID).ToListAsync(),
-                Groups = await _dbContext.Groups.Where(x => x.CustomerId == _customer.ID).ToListAsync()
+                Groups = await _dbContext.Groups.Where(x => x.CustomerId == _customer.ID).ToListAsync(),
+                Referee =Request.Headers["Referer"].ToString()
             };
             return View(MessageVM);
         }
@@ -61,6 +70,11 @@ namespace SMSBreeze.Web.Controllers
             }
             SMSServiceEBulk eBulk = new SMSServiceEBulk();
             var Response = await eBulk.SendSMSPOSTMethodAsync(messageObjectViewModel);
+                   if(Response.ValidationStatus == "Failed") {
+
+                ///Throw Client Side Validation for No recepient
+                return RedirectToAction(nameof(SendSms));
+            }
             SentReport Report = new SentReport()
             {
                 CustomerId =_customer.ID,
@@ -79,21 +93,15 @@ namespace SMSBreeze.Web.Controllers
             Report.SentSmsDetails = SmsDetails;
             if(Report.Status == "Failed")
             {
-                //Throw ClientSide Exception
+                //Throw ClientSide Exception for failed message
             }
             else { 
             _dbContext.Add(Report);
             _dbContext.SaveChanges();
             }
-            return RedirectToAction();
+            return RedirectToAction(nameof(Index),Report);
         }
-    public async Task<IActionResult> Index()
-        {
-            var user = await _signInManager.UserManager.GetUserAsync(User);
-            var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
-            var SmsOverview = await _dbContext.SendReports.Include(c => c.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).ToListAsync();
-            return View(SmsOverview);
-        }
+   
 }
 }
 

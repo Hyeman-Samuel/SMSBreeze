@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace SMSBreeze.Web.Models
 {
-    public class NumberFormatter
+    public class NumberFormatter: ValidationAttribute
     {
         public static Dictionary<string, string> FormatNumbers(MessageObjectViewModel messageObjectViewModel)
         {
@@ -50,8 +51,10 @@ namespace SMSBreeze.Web.Models
 
                 }
             }
+                    if(Keys != null)
+                      return Keys;
 
-            return Keys;
+            return null;
         }
     }
 }
