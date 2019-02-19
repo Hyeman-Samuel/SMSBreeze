@@ -4,12 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SMSBreeze.Models.Entities;
 using SMSBreeze.Web.Data;
-using PayStack.Net;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
 

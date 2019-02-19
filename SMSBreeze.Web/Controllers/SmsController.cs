@@ -24,13 +24,28 @@ namespace SMSBreeze.Web.Controllers
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Index(SentReport report)
+        public async Task<IActionResult> Index(SentReport report,int reportId)
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
             var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
-            var SmsOverview = await _dbContext.SendReports.Include(c => c.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).FirstAsync(x =>x.ID ==report.ID);
+            SentReport SmsOverview = new SentReport();
+            if (report == null)
+            {
+               SmsOverview = await _dbContext.SendReports.Include(c => c.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).FirstAsync(x => x.ID == report.ID);
+            }
+            else { 
+               SmsOverview = await _dbContext.SendReports.Include(c => c.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).FirstAsync(x =>x.ID ==reportId);
+            }
             return View(SmsOverview);
         }
+        public async Task<IActionResult> SmsDetails()
+        {
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
+            var SmsDetails = _dbContext.SendReports.Include(x => x.SentSmsDetails).Where(x => x.CustomerId == _customer.ID).ToList();
+            return View(SmsDetails);
+        }
+
         public async Task<IActionResult> SendSms()
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
