@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SMSBreeze.Web.Data;
 
-namespace SMSBreeze.Web.Data.Migrations
+namespace SMSBreeze.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190214183005_Clearup3")]
-    partial class Clearup3
+    [Migration("20190219200250_ChangedFromDecimalToInt2")]
+    partial class ChangedFromDecimalToInt2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -172,7 +172,7 @@ namespace SMSBreeze.Web.Data.Migrations
 
                     b.Property<string>("FullName");
 
-                    b.Property<decimal?>("SmsBalance");
+                    b.Property<int?>("SmsBalance");
 
                     b.HasKey("ID");
 
@@ -275,9 +275,15 @@ namespace SMSBreeze.Web.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AmountPaid");
+
                     b.Property<int>("CustomerId");
 
                     b.Property<DateTime>("DatePaid");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Reference");
 
                     b.Property<int>("UnitPurchased");
 

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SMSBreeze.Models.Entities;
 using SMSBreeze.Web.Data;
+
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
 
@@ -32,29 +34,7 @@ namespace SMSBreeze.Web.Controllers
 			
 			return View();
 		}
-
-		[HttpPost]
-		public async Task<IActionResult> PaymentForm([FromBody]SmsTransaction smstransactionData)
-		{
-			var user = await _signInManager.UserManager.GetUserAsync(User);
-			var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
-
-
-			@SmsTransaction _smsTransaction = new SmsTransaction()
-			{
-				Amount = smstransactionData.Amount,
-				CustomerId = _customer.ID,
-				Reference = smstransactionData.Reference,
-				UnitPurchased = smstransactionData.Amount / 3,
-				DatePaid = DateTime.Now.Date,
-				Email = smstransactionData.Email,
-
-			};
-			_context.Add(_smsTransaction);
-			return Json(smstransactionData);
-
-			
-		}
+        
 
 
 	}

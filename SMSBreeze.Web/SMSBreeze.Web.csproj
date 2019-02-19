@@ -13,14 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\20190207171511_init.cs" />
-    <Compile Remove="Data\Migrations\20190207171511_init.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190207172158_new.cs" />
-    <Compile Remove="Data\Migrations\20190207172158_new.Designer.cs" />
-    <Compile Remove="Data\Migrations\20190207172420_add-migration new.cs" />
-    <Compile Remove="Data\Migrations\20190207172420_add-migration new.Designer.cs" />
-    <Compile Remove="Migrations\20190219203842_clear_up4.cs" />
-    <Compile Remove="Migrations\20190219203842_clear_up4.Designer.cs" />
+    <Compile Remove="Migrations\20190218210634_Fix.cs" />
+    <Compile Remove="Migrations\20190218210634_Fix.Designer.cs" />
+    <Compile Remove="Migrations\20190219191220_ChangedFromDecimalToInt.cs" />
+    <Compile Remove="Migrations\20190219191220_ChangedFromDecimalToInt.Designer.cs" />
     <Compile Remove="Models\RequiredIfAttribute.cs" />
   </ItemGroup>
 

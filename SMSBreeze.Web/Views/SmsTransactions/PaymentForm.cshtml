@@ -1,17 +1,20 @@
-﻿@model SMSBreeze.Models.Entities.SmsTransaction
-
+﻿@model SMSBreeze.Models.Entities.SmsTransaction;
 @{
 	ViewData["Title"] = "PaymentForm";
 	Layout = "~/Views/Shared/_Layout.cshtml";
+    var rand = new Random(); 
 }
 <script>
-	function payWithPaystack() {
+    function payWithPaystack() {
+       
+        var random = "ade" + "@DateTime.Now.ToString("ddmmyy")" + "@rand.Next(123,42342).ToString()";
+
 		var handler = PaystackPop.setup({
-			key: 'pk_test_a3367966168bd777df5436b4068f6947c1a78b1b',
+            key: 'pk_test_670ce4fc274a1d009382a2e86548fde2a9e61a30',
 			email: $('#email').val(),
-			amount: $('#amount').val() * 100,
+			amount: $('#amount').val()*10,
 			currency: "NGN",
-			ref: '' + Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+		ref: random,// generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
 			metadata: {
 				custom_fields: [
 					{
@@ -21,14 +24,15 @@
 					}
 				]
 			},
-			callback: function (response) {
+            callback: function (response) {
+                debugger
 				var transact = new Object();
 				transact.Reference = response.reference;
-				transact.Amount = $('#amount').val() * 100;
+				transact.AmountPaid = $('#amount').val()*10;
 				transact.Email = $('#email').val();
 
 				$.ajax({
-					url: 'http://localhost:2284/API/VerifyPayment',
+                    url: 'http://localhost:55333/VerifyPayment/PaymentConfirmation',
 					type: 'POST',
 					dataType: 'json',
 					data:transact,
@@ -78,7 +82,7 @@
 			<div class="form-group">
 				<label class="control-label">Amount</label>
 				<input id="amount" class="form-control" />
-				<span asp-validation-for="Amount" class="text-danger"></span>
+				<span asp-validation-for="AmountPaid" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label class="control-label">Phone Number</label>
