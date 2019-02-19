@@ -17,19 +17,22 @@ namespace SMSBreeze.Web.Controllers
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _dbContext;
 
-		public HomeController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public HomeController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext dbContext)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
+            _dbContext = dbContext;
 		}
 		
-		public  IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			
-			//ViewBag.Person = user.Id;
-
-			return View();
+            var user = await _signInManager.UserManager.GetUserAsync(User);
+            var _customer = _dbContext.Customers.First(x => x.ApplicationUserId == user.Id);
+            //ViewBag.Person = user.Id;
+            ViewBag.UnitBalance = _customer.SmsBalance;
+            return View();
 		}
 
 		public IActionResult About()
