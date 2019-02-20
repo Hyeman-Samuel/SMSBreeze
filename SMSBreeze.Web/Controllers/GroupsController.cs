@@ -152,6 +152,7 @@ namespace SMSBreeze.Web.Controllers
         {
             var user = await _signInManager.UserManager.GetUserAsync(User);
             var _customer = _context.Customers.First(x => x.ApplicationUserId == user.Id);
+            var GroupAssig = _context.GroupAssigns.Where(x => x.Group.ID == id);
             if (id != group.ID)
             {
                 return NotFound();
@@ -163,9 +164,19 @@ namespace SMSBreeze.Web.Controllers
                 try
                 {
                     List<GroupAssign> _contacts = new List<GroupAssign>();
-                    if (Contacts == null) { }
+                    if (Contacts == null) {
+                        
+                    }
                     else
-                    {
+                    {    
+                        if(Contacts.Count() == 0) {
+                            foreach (var item in GroupAssig)
+                            {
+                                _context.GroupAssigns.Remove(item);
+                                group.Members.Remove(item);
+                            }
+                        }
+                        
                         foreach (var item in Contacts)
                         {
                             var contacts = _context.Contacts.First(x => x.ID == item);
@@ -174,12 +185,30 @@ namespace SMSBreeze.Web.Controllers
                             {
                                 ContactID = contacts.ID
                             };
-                            _contacts.Add(assign);
+                            _contacts.Add(assign);                                
                         }
-                        group.Members = _contacts;
+                            foreach (var Contact in GroupAssig)
+                            {
+                                var check = Contacts.Any((x => x == Contact.ContactID));
+
+                                if (Contacts.Any(x => x == Contact.ContactID)) { }
+                                else
+                                {
+                                    var _contact = GroupAssig.First(x => x.ContactID == Contact.ContactID);
+                                    _context.GroupAssigns.Remove(_contact);
+                                   group.Members.Remove(_contact);
+
+                                }
+                            }
+
+                            group.Members = _contacts;
                     }
-                    _context.Update(group);
+
+                        
+                        _context.Update(group);
                     await _context.SaveChangesAsync();
+
+                        
                     }
                 }
                 catch (DbUpdateConcurrencyException)
