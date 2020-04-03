@@ -21,8 +21,6 @@ namespace SMSBreeze.Web.Data
 		public DbSet<SentReport> SendReports { get; set; }
 		public DbSet<SentSmsDetails> SmsDetails { get; set; }
 		public DbSet<SmsTransaction> SmsTransactions { get; set; }
-
-
 		
 	}
 }
